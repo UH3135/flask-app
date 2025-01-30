@@ -10,19 +10,11 @@ file structure
 │   ├── models.py          # 데이터베이스 모델 정의
 │   ├── blueprints/
 │   │   ├── _init__.py    # 블루프린트 등록
-│   │   ├── auth/          # 인증 관련 블루프린트
-│   │   │   ├── _init__.py 
-│   │   │   ├── routes.py  # 로그인, 회원가입 등 API
-│   │   │   ├── models.py  # Auth 관련 모델 (User 등)
-│   │   │   ├── forms.py   # Flask-WTF 폼 (선택 사항)
-│   │   ├── main/          # 메인 블루프린트 (홈, 대시보드 등)
-│   │   │   ├── _init__.py 
-│   │   │   ├── routes.py
-│   │   │   ├── templates/
-│   │   │   ├── static/
 │── instance/
 │   ├── config.py          # 비밀 키 및 환경 변수
 │── migrations/            # Flask-Migrate 마이그레이션 폴더
+|── example/
+│   ├── test_app.py        # app 관련 유닛 테스트
 │── run.py                 # 앱 실행 파일
 │── requirements.txt
 │── .env                   # 환경 변수

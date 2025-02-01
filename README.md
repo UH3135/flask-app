@@ -6,7 +6,6 @@ file structure
 │   ├── _init__.py        # Flask 앱 및 확장 초기화
 │   ├── config.py          # 각 환경별 설정
 │   ├── routes.py          # 블루프린트 없이 공통 라우트 관리 (필요 시)
-│   ├── extensions.py      # Flask 확장 (DB, Migrate 등) 초기화
 │   ├── models.py          # 데이터베이스 모델 정의
 │   ├── blueprints/
 │   │   ├── _init__.py    # 블루프린트 등록

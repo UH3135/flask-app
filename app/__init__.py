@@ -1,17 +1,18 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from app.models import db
+from flask_wtf import CSRFProtect
 from app.config import config
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
-db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
 
     env = os.getenv("FLASK_ENV", "default")
     app.config.from_object(config[env])
+    csrf = CSRFProtect(app)
     
     # DB 설정
     db.init_app(app)

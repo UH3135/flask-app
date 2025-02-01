@@ -11,6 +11,7 @@ class Config:
 class DevelopmentConfig(Config):
     '''개발 환경'''
     SQLALCHEMY_DATABASE_URI = "sqlite:///dev.db"
+    SECRET_KEY = 'dev-secret-key'  # 배포시에는 제거
     DEBUG = True
 
 

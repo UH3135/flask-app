@@ -10,7 +10,6 @@ class UserCRUDTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.app = create_app()
         self.app.testing = True
-        self.app.debug = True
         self.client = self.app.test_client()
 
         with self.app.app_context():
@@ -22,26 +21,53 @@ class UserCRUDTestCase(unittest.TestCase):
             db.session.remove()
             db.drop_all()
 
+
+    def test_csrf_token(self):
+        response = self.client.get('/csrf_token')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('csrf_token', response.get_json())
+
+    
+    def test_create_user_without_csrf(self):
+        response = self.client.post('/user', json={"name": "Alice", 'password': 'qwerqwer9', "email": "alice@example.com"})
+        self.assertEqual(response.status_code, 400)
+
     
     def test_create_user(self):
-        response = self.client.post('/user', json={"name": "Alice", "email": "alice@example.com"})
+        response = self.client.get('/csrf_token')
+        csrf_token = response.get_json()['csrf_token']
+
+        response = self.client.post(
+            "/user",
+            json={"name": "Alice", 'password': 'qwerqwer9', "email": "alice@example.com"},
+            headers={'X-CSRFToken': csrf_token}
+        )
         self.assertEqual(response.status_code, 200)
         self.assertIn('id', response.get_json())
     
     
     def test_delete_user(self):
-        self.client.post('/user', json={"name": "Alice", "email": "alice@example.com"})
-        response = self.client.delete('/user', json={"name": "Alice"})
+        response = self.client.get('/csrf_token')
+        csrf_token = response.get_json()['csrf_token']
+
+        self.client.post(
+            '/user',
+            json={"name": "Alice", 'password': 'qwerqwer9', "email": "alice@example.com"},
+            headers={'X-CSRFToken': csrf_token}
+        )
+        response = self.client.delete(
+            '/user',
+            json={"name": "Alice"},
+            headers={'X-CSRFToken': csrf_token}
+        )
         self.assertEqual(response.status_code, 200)
         self.assertIn('User deleted', response.get_json()['message'])
     
 
     def test_show_user(self):
-        response = self.client.post('/user', json={"name": "Alice", "email": "alice@example.com"})
+        response = self.client.post('/user', json={"name": "Alice", 'password': 'qwerqwer9', "email": "alice@example.com"})
         response = self.client.get('/user')
         self.assertEqual(response.status_code, 200)
-        # self.assertIn('id', response.get_json())
-
 
 
 if __name__ == "__main__":

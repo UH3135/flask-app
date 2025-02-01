@@ -4,3 +4,4 @@ pybo.db
 migrations
 .cursor
 instance
+venv
